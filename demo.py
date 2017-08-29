@@ -22,7 +22,7 @@ def getNowPlayingMovie_list():
 #爬取评论函数
 def getCommentsById():
   nowplaying_list = getNowPlayingMovie_list()
-  requrl = 'https://movie.douban.com/subject/' + nowplaying_list[0]['id'] + 'comments' + '?' + 'start=0'  + '&limit=20'
+  requrl = 'https://movie.douban.com/subject/' + nowplaying_list[0]['id'] + '/comments' +'?' +'start=0' + '&limit=20'
   resp = request.urlopen(requrl)
   html_data = resp.read().decode('utf-8')
   soup = bs(html_data, 'html.parser')
@@ -32,3 +32,5 @@ def getCommentsById():
     if item.find_all('p')[0].string is not None:
       eachCommentList.append(item.find_all('p')[0].string)
   print(eachCommentList)
+
+getCommentsById()
