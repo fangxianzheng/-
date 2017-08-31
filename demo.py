@@ -17,7 +17,7 @@ from scipy.misc import imread
 
 #分析网页函数
 def getNowPlayingMovie_list():
-    resp = request.urlopen('https://movie.douban.com/nowplaying/hangzhou/')
+    resp = request.urlopen('https://movie.douban.com/cinema/nowplaying/shanghai/')
     html_data = resp.read().decode('utf-8')
     soup = bs(html_data, 'html.parser')
     nowplaying_movie = soup.find_all('div', id='nowplaying')
@@ -79,14 +79,20 @@ def main():
     words_stat=words_df.groupby(by=['segment'])['segment'].agg({"计数":numpy.size})
     words_stat=words_stat.reset_index().sort_values(by=["计数"],ascending=False)
 
-    #自定义词云背景
-    bimg = imread('heart.jpg')
-    wordcloud = WordCloud(background_color="white", mask=bimg, font_path='simhei.ttf')
-    wordcloud = wordcloud.fit_words(words_stat.head(4000).itertuples(index=False))
-    bimgColors = ImageColorGenerator(bimg)
-    plt.axis("off")
-    plt.imshow(wordcloud.recolor(color_func=bimgColors))
-    plt.show()
+    word_frequence = {x[0]:x[1] for x in words_stat.head(1000).values}
 
+    word_frequence_list = []
+    for key in word_frequence:
+        temp = (key,word_frequence[key])
+        word_frequence_list.append(temp)
+
+  #用词云进行显示
+    bimg = imread('heart.jpg')
+    wordcloud=WordCloud(font_path="simhei.ttf",background_color="white",max_font_size=200,mask=bimg)
+    wordcloud=wordcloud.fit_words(dict(word_frequence_list))
+    bimgColors = ImageColorGenerator(bimg)
+    plt.imshow(wordcloud.recolor(color_func=bimgColors))
+    plt.axis("off")
+    plt.show()
 #主函数
 main()
