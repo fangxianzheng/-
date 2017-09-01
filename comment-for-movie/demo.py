@@ -86,7 +86,7 @@ def main():
         temp = (key,word_frequence[key])
         word_frequence_list.append(temp)
 
-  #用词云进行显示
+    #用词云进行显示
     bimg = imread('heart.jpg')
     wordcloud=WordCloud(font_path="simhei.ttf",background_color="white",max_font_size=200,mask=bimg)
     wordcloud=wordcloud.fit_words(dict(word_frequence_list))
